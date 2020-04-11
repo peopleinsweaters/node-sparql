@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/peopleinsweaters/node-sparql/workflows/Node.js%20CI/badge.svg)
+
 # Development
 
 ## Build
