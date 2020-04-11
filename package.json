@@ -1,0 +1,35 @@
+{
+  "name": "@peopleinsweaters/sparql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist",
+    "/src"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run clean && npm run build",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "watch": "npm run build -- -w",
+    "docs": "typedoc --out docs",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "author": "Andy Greene",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "got": "^10.7.0",
+    "rxjs": "^6.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.1",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "eslint": "^6.8.0",
+    "ts-node": "^8.8.2",
+    "typedoc": "^0.17.4",
+    "typescript": "^3.8.3"
+  }
+}
