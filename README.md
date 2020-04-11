@@ -1,6 +1,7 @@
 ![Node.js CI](https://github.com/peopleinsweaters/node-sparql/workflows/Node.js%20CI/badge.svg)
+[![npm (scoped)](https://img.shields.io/npm/v/@peopleinsweaters/sparql)](https://www.npmjs.com/package/@peopleinsweaters/sparql)
 
-# Development
+# Sparql
 
 ## Build
 ```bash
