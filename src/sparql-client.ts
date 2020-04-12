@@ -42,7 +42,7 @@ export class SparqlClient {
    * @param query the construct query
    */
   public construct<T>(query: string): Observable<T> {
-    return this.pQuery<T>(this.url, query, 'application/ld+json');
+    return this.pQuery<T>(this.url, query, 'application/ld+json; profile="http://www.w3.org/ns/json-ld#expanded"');
   }
 
   /**
@@ -51,7 +51,7 @@ export class SparqlClient {
    * @param request an ask, select, or construct query
    */
   public query<T>(request: string): Observable<T> {
-    return this.pQuery(this.url, request, ['application/sparql-results+json', 'application/ld+json']);
+    return this.pQuery(this.url, request, ['application/sparql-results+json', 'application/ld+json; profile="http://www.w3.org/ns/json-ld#expanded"']);
   }
 
   /**
