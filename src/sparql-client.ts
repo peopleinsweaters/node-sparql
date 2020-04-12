@@ -70,7 +70,7 @@ export class SparqlClient {
       const request = got.post(url, {
         username: this.options?.auth?.username,
         password: this.options?.auth?.password,
-        resolveBodyOnly: true,
+        resolveBodyOnly: false,
         responseType: 'text',
         form: {
           update: update,
@@ -79,8 +79,8 @@ export class SparqlClient {
           Accept: resultType,
         },
       });
-      request.then((result) => {
-        subscriber.next(result);
+      request.then((response) => {
+        subscriber.next(response.body);
         subscriber.complete();
       }).catch((err) => {
         subscriber.error(err);
@@ -97,7 +97,7 @@ export class SparqlClient {
       const request = got.post<T>(url, {
         username: this.options?.auth?.username,
         password: this.options?.auth?.password,
-        resolveBodyOnly: true,
+        resolveBodyOnly: false,
         responseType: 'json',
         form: {
           query: query,
@@ -106,8 +106,8 @@ export class SparqlClient {
           Accept: resultType,
         },
       });
-      request.then((result) => {
-        subscriber.next(result);
+      request.then((response) => {
+        subscriber.next(response.body);
         subscriber.complete();
       }).catch((err) => {
         subscriber.error(err);
