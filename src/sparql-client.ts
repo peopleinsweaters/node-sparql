@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SparqlAskResults } from './sparql-ask-results';
 
 export interface SparqlClientOptions {
+  /** some databases have a seperate endpoint for updates */
   updateUrl?: string;
   /** authentication options */
   auth?: {
@@ -21,14 +22,14 @@ export class SparqlClient {
 
   constructor(url: string, options?: SparqlClientOptions) {
     this.url = url;
-    this.updateUrl = this.options?.updateUrl ?? url;
     this.options = options;
+    this.updateUrl = options?.updateUrl ?? url;
 
     this.got = got;
     if (options?.auth) {
       this.got = got.extend({
-        username: this.options.auth.username,
-        password: this.options.auth.password,
+        username: options.auth.username,
+        password: options.auth.password,
       });
     }
   }
@@ -79,14 +80,14 @@ export class SparqlClient {
 
   private pUpdate(update: string, resultType: string | string[]): Observable<string> {
     return new Observable((subscriber) => {
+      console.log(this.updateUrl);
       const request = this.got.post(this.updateUrl, {
         resolveBodyOnly: false,
         responseType: 'text',
-        form: {
-          update: update,
-        },
+        body: update,
         headers: {
           Accept: resultType,
+          'Content-Type': 'application/sparql-update'
         },
       });
       request.then((response) => {
