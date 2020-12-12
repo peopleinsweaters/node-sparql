@@ -80,7 +80,6 @@ export class SparqlClient {
 
   private pUpdate(update: string, resultType: string | string[]): Observable<string> {
     return new Observable((subscriber) => {
-      console.log(this.updateUrl);
       const request = this.got.post(this.updateUrl, {
         resolveBodyOnly: false,
         responseType: 'text',
