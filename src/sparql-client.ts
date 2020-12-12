@@ -1,10 +1,11 @@
 
 import { SparqlSelectResults } from './sparql-select-results';
-import got from 'got';
+import got, { Got } from 'got';
 import { Observable } from 'rxjs';
 import { SparqlAskResults } from './sparql-ask-results';
 
 export interface SparqlClientOptions {
+  updateUrl?: string;
   /** authentication options */
   auth?: {
     username: string;
@@ -14,11 +15,22 @@ export interface SparqlClientOptions {
 
 export class SparqlClient {
   private url: string;
+  private updateUrl: string;
   private options: SparqlClientOptions;
+  private readonly got: Got;
 
   constructor(url: string, options?: SparqlClientOptions) {
     this.url = url;
+    this.updateUrl = this.options?.updateUrl ?? url;
     this.options = options;
+
+    this.got = got;
+    if (options?.auth) {
+      this.got = got.extend({
+        username: this.options.auth.username,
+        password: this.options.auth.password,
+      });
+    }
   }
 
   /**
@@ -42,7 +54,7 @@ export class SparqlClient {
    * @param query the construct query
    */
   public construct<T>(query: string): Observable<T> {
-    return this.pQuery<T>(this.url, query, 'application/ld+json; profile="http://www.w3.org/ns/json-ld#expanded"');
+    return this.pQuery<T>(this.url, query, 'application/ld+json;profile="http://www.w3.org/ns/json-ld#expanded"');
   }
 
   /**
@@ -51,7 +63,7 @@ export class SparqlClient {
    * @param request an ask, select, or construct query
    */
   public query<T>(request: string): Observable<T> {
-    return this.pQuery(this.url, request, ['application/sparql-results+json', 'application/ld+json; profile="http://www.w3.org/ns/json-ld#expanded"']);
+    return this.pQuery(this.url, request, ['application/sparql-results+json', 'application/ld+json;profile="http://www.w3.org/ns/json-ld#expanded"']);
   }
 
   /**
@@ -59,17 +71,15 @@ export class SparqlClient {
    * @param request 
    */
   public update(request: string): Observable<string> {
-    return this.pUpdate(this.url, request, ['*/*']);
+    return this.pUpdate(request, ['*/*']);
   }
 
   // Private methods
   // --------------------------------------------------------------------------
 
-  private pUpdate(url: string, update: string, resultType: string | string[]): Observable<string> {
+  private pUpdate(update: string, resultType: string | string[]): Observable<string> {
     return new Observable((subscriber) => {
-      const request = got.post(url, {
-        username: this.options?.auth?.username,
-        password: this.options?.auth?.password,
+      const request = this.got.post(this.updateUrl, {
         resolveBodyOnly: false,
         responseType: 'text',
         form: {
@@ -94,9 +104,7 @@ export class SparqlClient {
 
   private pQuery<T>(url: string, query: string, resultType: string | string[]): Observable<T> {
     return new Observable((subscriber) => {
-      const request = got.post<T>(url, {
-        username: this.options?.auth?.username,
-        password: this.options?.auth?.password,
+      const request = this.got.post<T>(url, {
         resolveBodyOnly: false,
         responseType: 'json',
         form: {
