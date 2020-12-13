@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 
 import { SparqlClient } from '../src/index';
 
