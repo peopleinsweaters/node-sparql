@@ -1,5 +1,5 @@
 
 export interface SparqlAskResults {
-  head: {};
+  head: Record<string, never>;
   boolean: boolean;
 }
