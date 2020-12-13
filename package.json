@@ -1,7 +1,11 @@
 {
   "name": "@peopleinsweaters/sparql",
   "version": "1.0.4",
-  "description": "",
+  "description": "A SPARQL Client",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/peopleinsweaters/node-sparql.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
